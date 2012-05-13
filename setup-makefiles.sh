@@ -188,8 +188,8 @@ PRODUCT_COPY_FILES += \\
     vendor/__VENDOR__/__DEVICE__/proprietary/lib/libcapl.so:system/lib/libcapl.so \\
     vendor/__VENDOR__/__DEVICE__/proprietary/lib/libcameraalgo.so:obj/lib/libcameraalgo.so \\
     vendor/__VENDOR__/__DEVICE__/proprietary/lib/libcameraalgo.so:system/lib/libcameraalgo.so \\
-    vendor/__VENDOR__/__DEVICE__/proprietary/lib/libcamera.so:obj/lib/libcamera.so \\
-    vendor/__VENDOR__/__DEVICE__/proprietary/lib/libcamera.so:system/lib/libcamera.so \\
+    #vendor/__VENDOR__/__DEVICE__/proprietary/lib/libcamera.so:obj/lib/libcamera.so \\
+    #vendor/__VENDOR__/__DEVICE__/proprietary/lib/libcamera.so:system/lib/libcamera.so \\
     vendor/__VENDOR__/__DEVICE__/proprietary/lib/libarcsoft_camera_func.so:obj/lib/libarcsoft_camera_func.so \\
     vendor/__VENDOR__/__DEVICE__/proprietary/lib/libarcsoft_camera_func.so:system/lib/libarcsoft_camera_func.so \\
     vendor/__VENDOR__/__DEVICE__/proprietary/lib/libImagePipeline.so:obj/lib/libImagePipeline.so \\
