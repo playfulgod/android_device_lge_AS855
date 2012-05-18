@@ -103,7 +103,6 @@ PRODUCT_COPY_FILES += \\
     
 ## GPS
 PRODUCT_COPY_FILES += \\
-
     vendor/__VENDOR__/__DEVICE__/proprietary/lib/hw/gps.omap3.so:system/lib/hw/gps.omap3.so
 
 ## Sensors

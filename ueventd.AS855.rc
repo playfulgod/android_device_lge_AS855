@@ -25,3 +25,7 @@
 /dev/omap-resizer 	0644	media	system
 /dev/omap-prev2resz 	0644	media	system
 /dev/ttyO1 0660 bluetooth bluetooth
+# CDMA radio interface MUX
+/dev/ts0710mux*           0640   radio      radio
+/dev/ppp                  0660   radio      vpn
+/dev/tun                  0640   vpn        vpn

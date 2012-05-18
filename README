@@ -9,3 +9,4 @@ Copyright (C) 2011 The CyanogenMod Project
       http://www.apache.org/licenses/LICENSE-2.0
 
 2012_03_20 - At the time of this initial commit this does not build. Still getting errors sorted out.
+2012_05_15 - Wifi, BT, Camera, Video playback working
