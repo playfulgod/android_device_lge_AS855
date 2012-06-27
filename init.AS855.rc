@@ -415,6 +415,8 @@ on boot
     chmod 0666 /sys/devices/platform/i2c-gpio.7/i2c-adapter/i2c-7/7-001c/checkresult
     chmod 0666 /sys/devices/platform/i2c-gpio.7/i2c-adapter/i2c-7/7-001c/checkopmode
 
+    chmod 666 /sys/devices/platform/modem_ctrl/cp_ril_init
+
     chmod 0666 /sys/devices/platform/omapdss/display0/name
     chmod 0666 /sys/devices/platform/omapdss/display1/name
     chmod 0666 /sys/devices/platform/omapdss/display0/enabled
