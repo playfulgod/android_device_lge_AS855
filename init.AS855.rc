@@ -351,6 +351,10 @@ on boot
     chown system system /sys/kernel/ipv4/tcp_rmem_max
     chown root radio /proc/cmdline
 
+# LG_RIL_RECOVERY_MODE_D2
+    chown radio system /sys/devices/platform/modem_ctrl/cp_ril_init
+    chmod 0660 /sys/devices/platform/modem_ctrl/cp_ril_init
+
 # Define TCP buffer sizes for various networks
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
     setprop net.tcp.buffersize.default 4096,87380,110208,4096,16384,110208
@@ -414,8 +418,6 @@ on boot
     chmod 0666 /sys/devices/platform/motion_sensor/yawimage_onoff
     chmod 0666 /sys/devices/platform/i2c-gpio.7/i2c-adapter/i2c-7/7-001c/checkresult
     chmod 0666 /sys/devices/platform/i2c-gpio.7/i2c-adapter/i2c-7/7-001c/checkopmode
-
-    chmod 666 /sys/devices/platform/modem_ctrl/cp_ril_init
 
     chmod 0666 /sys/devices/platform/omapdss/display0/name
     chmod 0666 /sys/devices/platform/omapdss/display1/name
