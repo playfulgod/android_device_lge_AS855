@@ -345,11 +345,17 @@ on boot
     chown system system /sys/module/sco/parameters/disable_esco
     chown system system /sys/kernel/ipv4/tcp_wmem_min
     chown system system /sys/kernel/ipv4/tcp_wmem_def
-    chown system system /sys/kernel/ipv4/tcp_wmem_max
+    chown system system /sys/kernel/ipv4/tcp_wmem_maxvibrator
     chown system system /sys/kernel/ipv4/tcp_rmem_min
     chown system system /sys/kernel/ipv4/tcp_rmem_def
     chown system system /sys/kernel/ipv4/tcp_rmem_max
     chown root radio /proc/cmdline
+
+        chown radio system /sys/class/lg_fw_diagclass/lg_fw_diagcmd/bt_dun_by_cp
+	chmod 0660 /sys/class/lg_fw_diagclass/lg_fw_diagcmd/bt_dun_by_cp
+
+        chown radio system /sys/devices/platform/modem_ctrl/ril_fail
+	chmod 0660 /sys/devices/platform/modem_ctrl/ril_fail
 
 # LG_RIL_RECOVERY_MODE_D2
     chown radio system /sys/devices/platform/modem_ctrl/cp_ril_init
@@ -375,6 +381,16 @@ on boot
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
     write /sys/class/rfkill/rfkill0/state 0
+
+# Sensor
+    chown system system /dev/akm8973_daemon
+	chown system system /dev/kxtf9_accel
+    chown system system /dev/akm8973_aot
+# LGE_CHANGE_S, ryu.seeyeol@lge.com, 2011-02-01, Sensors Porting (MPL V3.3 Release)
+    chmod 0777 /dev/mpu
+    chmod 0777 /dev/mpuirq
+    chmod 0777 /dev/accelirq
+    chmod 0777 /dev/timerirq
 
     chown system system /sys/devices/platform/motion_sensor/accel_onoff
     chown system system /sys/devices/platform/motion_sensor/accel_delay
@@ -405,8 +421,8 @@ on boot
     chmod 0666 /sys/devices/platform/motion_sensor/tilt_delay
     chmod 0666 /sys/devices/platform/motion_sensor/gyro_onoff
     chmod 0666 /sys/devices/platform/motion_sensor/gyro_delay
-    chmod 0666 /sys/bus/i2c/drivers/hub_proxi/3-0044/onoff
-    chmod 0666 /sys/bus/i2c/drivers/hub_proxi/3-0044/delay
+    chmod 0664 /sys/bus/i2c/drivers/hub_proxi/3-0044/onoff
+    chmod 0664 /sys/bus/i2c/drivers/hub_proxi/3-0044/delay
     chmod 0666 /sys/devices/platform/motion_sensor/shake_onoff
     chmod 0666 /sys/bus/i2c/drivers/kxtf9/3-000f/shake_onoff
     chmod 0666 /sys/devices/platform/motion_sensor/snap_onoff
@@ -419,6 +435,8 @@ on boot
     chmod 0666 /sys/devices/platform/i2c-gpio.7/i2c-adapter/i2c-7/7-001c/checkresult
     chmod 0666 /sys/devices/platform/i2c-gpio.7/i2c-adapter/i2c-7/7-001c/checkopmode
 
+
+    chmod 664 /sys/devices/omapdss/display0
     chmod 0666 /sys/devices/platform/omapdss/display0/name
     chmod 0666 /sys/devices/platform/omapdss/display1/name
     chmod 0666 /sys/devices/platform/omapdss/display0/enabled
@@ -461,6 +479,10 @@ on boot
 
     chmod 0664 /sys/devices/platform/i2c_omap.2/i2c-2/2-0060/leds/lcd-backlight/als
     chown system system /sys/devices/platform/i2c_omap.2/i2c-2/2-0060/leds/lcd-backlight/als
+
+    # vibrator
+	chown shell system /dev/tspdrv
+	chmod 0660 /dev/tspdrv
 
     # Batt gauge error detection
     chmod 0666 /sys/bus/platform/drivers/twl4030_bci/twl4030_bci/gauge_if
@@ -526,6 +548,17 @@ on boot
 
 ## Daemon processes to be run by init.
 ##
+
+    chmod 0777 /etc/init.gprs-pppd
+    chown root radio /etc/init.gprs-pppd
+    chmod 0777 /etc/ppp/ip-down
+    chown root radio /etc/ppp/ip-down
+    chmod 0777 /etc/ppp/ip-up
+    chown root radio /etc/ppp/ip-up
+
+    chmod 0777 /etc/init.vsnet
+    chown root radio /etc/init.vsnet
+
 service ueventd /sbin/ueventd
     critical
 
@@ -588,11 +621,32 @@ service netd /system/bin/netd
 
 service debuggerd /system/bin/debuggerd
 
-service ril-daemon /system/bin/rild
+############## 6/27/12 GA ################
+#service ril-daemon /system/bin/rild
+#    socket rild stream 660 root radio
+#    socket rild-debug stream 660 radio system
+#    user root
+#    group radio cache inet misc audio sdcard_rw net_admin net_raw
+
+service ril-daemon /system/bin/rild -l /system/lib/lge-ril.so -- -d /dev/ttyspi0
     socket rild stream 660 root radio
     socket rild-debug stream 660 radio system
     user root
-    group radio cache inet misc audio sdcard_rw net_admin net_raw
+    group radio cache inet misc audio sdcard_rw
+
+# LGE_LAB3_CHANGE_S FOR_CDMA US850  sungjoong.kang@lge.com
+service pppd_gprs /etc/init.gprs-pppd
+   user root
+   group radio cache inet misc
+   disabled
+   oneshot
+
+service pppd_gprs1 /etc/init.gprs-pppd 1
+   user root
+   group radio cache inet misc
+   disabled
+   oneshot
+#############################################
 
 service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server
     socket zygote stream 666
@@ -685,6 +739,7 @@ service dumpstate /system/bin/dumpstate -s
 service glgps /system/bin/glgps -c /system/etc/gps_brcm_conf.xml
     user root
     group system
+    oneshot
 
 on property:dev.bootcomplete=1
     write /sys/devices/platform/i2c_omap.2/i2c-2/2-001a/blink_enable 0
